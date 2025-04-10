@@ -14,7 +14,7 @@ interface ToolCardProps {
 
 export default function ToolCard({ icon, title, description, bgColor, onClick }: ToolCardProps) {
   return (
-    <Card className="border-0 shadow-lg hover:shadow-xl transition-all bg-[#16213e] text-white overflow-hidden">
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all bg-[#16213e] text-white overflow-hidden group">
       <div className={`h-1 w-full ${bgColor}`}></div>
       <CardHeader>
         <div className="flex justify-between items-start">
@@ -32,9 +32,9 @@ export default function ToolCard({ icon, title, description, bgColor, onClick }:
       <CardFooter className="border-t border-gray-800 pt-4">
         <Button 
           onClick={onClick} 
-          className="ml-auto bg-[#0f3460] hover:bg-[#0f3460]/80 text-white"
+          className="ml-auto bg-[#0f3460] hover:bg-[#0f3460]/80 text-white group-hover:translate-x-1 transition-transform"
         >
-          Try Now <ArrowRight className="ml-2 h-4 w-4" />
+          Try Now <ArrowRight className="ml-2 h-4 w-4 group-hover:animate-pulse" />
         </Button>
       </CardFooter>
     </Card>
