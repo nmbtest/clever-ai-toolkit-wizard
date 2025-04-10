@@ -1,15 +1,18 @@
 
 import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CategorySectionProps {
   id: string;
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon: React.ReactNode;
   children: React.ReactNode;
 }
 
-export default function CategorySection({ id, title, description, icon, children }: CategorySectionProps) {
+export default function CategorySection({ id, titleKey, descriptionKey, icon, children }: CategorySectionProps) {
+  const { t, dir } = useLanguage();
+
   return (
     <section id={id} className="py-16 relative">
       {/* Decorative background elements */}
@@ -22,11 +25,11 @@ export default function CategorySection({ id, title, description, icon, children
             {icon}
           </div>
         </div>
-        <h2 className="text-3xl font-bold text-white mb-3">{title}</h2>
-        <p className="text-gray-400 max-w-2xl mx-auto">{description}</p>
+        <h2 className="text-3xl font-bold text-white mb-3">{t(titleKey)}</h2>
+        <p className="text-gray-400 max-w-2xl mx-auto">{t(descriptionKey)}</p>
         <div className="mt-4 w-20 h-1 bg-gradient-to-r from-[#e94560] to-[#0f3460] mx-auto rounded-full"></div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ${dir === "rtl" ? "dir-rtl text-right" : ""}`}>
         {children}
       </div>
     </section>

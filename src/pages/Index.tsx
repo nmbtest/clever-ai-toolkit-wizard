@@ -4,8 +4,14 @@ import Header from "@/components/Header";
 import TextToSpeech from "@/components/TextToSpeech";
 import ImageToText from "@/components/ImageToText";
 import ArticleGenerator from "@/components/ArticleGenerator";
+import SpeechRecognition from "@/components/SpeechRecognition";
+import ImageGenerator from "@/components/ImageGenerator";
+import LanguageTranslator from "@/components/LanguageTranslator";
 import CategorySection from "@/components/CategorySection";
 import ToolCard from "@/components/ToolCard";
+import ComingSoon from "@/components/ComingSoon";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   BrainCircuit, 
   ChevronDown, 
@@ -27,6 +33,7 @@ import {
 import { toast } from "sonner";
  
 const Index = () => {
+  const { t, dir } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -47,15 +54,24 @@ const Index = () => {
         element.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }
-    
-    // If tool is not implemented yet, show toast
-    if (!["text-to-speech", "image-to-text", "article-generator"].includes(toolId)) {
-      toast.info("This tool is coming soon! Stay tuned for updates.");
-    }
   };
 
+  // List of implemented tools
+  const implementedTools = [
+    "text-to-speech", 
+    "image-to-text", 
+    "article-generator",
+    "speech-recognition",
+    "image-generator",
+    "language-translator"
+  ];
+
   return (
-    <div className="min-h-screen bg-[#1a1a2e]">
+    <div className={`min-h-screen bg-[#1a1a2e] ${dir === "rtl" ? "text-right" : "text-left"}`}>
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSwitcher />
+      </div>
+      
       <Header />
       
       <main className="container mx-auto px-4 py-8 sm:px-6 lg:px-8">
@@ -65,13 +81,13 @@ const Index = () => {
             <BrainCircuit className="h-20 w-20 text-[#e94560] animate-pulse-slow" />
           </div>
           <h1 className="mt-6 text-4xl font-extrabold text-white sm:text-5xl md:text-6xl">
-            <span className="block">AI Toolkit Pro</span>
+            <span className="block">{t("app.title")}</span>
             <span className="block text-2xl sm:text-3xl md:text-4xl mt-3 bg-gradient-to-r from-[#e94560] to-[#0f3460] text-transparent bg-clip-text">
-              Advanced AI tools for every creative need
+              {t("app.subtitle")}
             </span>
           </h1>
           <p className="mt-5 max-w-md mx-auto text-base text-gray-400 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-            Explore our suite of 13 AI-powered tools to enhance your productivity, creativity, and workflow
+            {t("Explore our suite of 13 AI-powered tools to enhance your productivity, creativity, and workflow")}
           </p>
           
           {/* Quick category navigation */}
@@ -83,7 +99,7 @@ const Index = () => {
               }} 
               className="px-5 py-2 text-sm font-medium rounded-full bg-[#16213e] hover:bg-[#0f3460] transition-all text-white border border-[#0f3460]"
             >
-              Text Tools
+              {t("category.text")}
             </button>
             <button 
               onClick={() => {
@@ -92,7 +108,7 @@ const Index = () => {
               }} 
               className="px-5 py-2 text-sm font-medium rounded-full bg-[#16213e] hover:bg-[#0f3460] transition-all text-white border border-[#0f3460]"
             >
-              Voice Tools
+              {t("category.voice")}
             </button>
             <button 
               onClick={() => {
@@ -101,7 +117,7 @@ const Index = () => {
               }} 
               className="px-5 py-2 text-sm font-medium rounded-full bg-[#16213e] hover:bg-[#0f3460] transition-all text-white border border-[#0f3460]"
             >
-              Image Tools
+              {t("category.image")}
             </button>
             <button 
               onClick={() => {
@@ -110,7 +126,7 @@ const Index = () => {
               }} 
               className="px-5 py-2 text-sm font-medium rounded-full bg-[#16213e] hover:bg-[#0f3460] transition-all text-white border border-[#0f3460]"
             >
-              Video Tools
+              {t("category.video")}
             </button>
           </div>
           
@@ -125,127 +141,140 @@ const Index = () => {
           {/* Text Tools */}
           <CategorySection 
             id="text" 
-            title="Text Tools" 
-            description="Transform and enhance your text content with advanced AI capabilities"
+            titleKey="category.text" 
+            descriptionKey="category.text.description"
             icon={<FileText className="h-8 w-8" />}
           >
             <ToolCard 
               icon={<FileText className="h-6 w-6" />}
-              title="Article Generator"
-              description="Generate well-structured articles on any topic with our advanced AI model"
+              titleKey="tool.article-generator"
+              descriptionKey="tool.article-generator.description"
               bgColor="bg-gradient-to-r from-[#e94560] to-[#f2726d]"
               onClick={() => handleSelectTool("article-generator")}
+              isImplemented={implementedTools.includes("article-generator")}
             />
             <ToolCard 
               icon={<MessageSquare className="h-6 w-6" />}
-              title="Chatbot Builder"
-              description="Create customized AI chatbots for your website or application"
+              titleKey="tool.chatbot-builder"
+              descriptionKey="tool.chatbot-builder.description"
               bgColor="bg-gradient-to-r from-[#72a1f8] to-[#a2b9f0]"
               onClick={() => handleSelectTool("chatbot-builder")}
+              isImplemented={implementedTools.includes("chatbot-builder")}
             />
             <ToolCard 
               icon={<FileCode className="h-6 w-6" />}
-              title="Code Generator"
-              description="Generate code snippets or complete functions based on your description"
+              titleKey="tool.code-generator"
+              descriptionKey="tool.code-generator.description"
               bgColor="bg-gradient-to-r from-[#5b8def] to-[#7da6f4]"
               onClick={() => handleSelectTool("code-generator")}
+              isImplemented={implementedTools.includes("code-generator")}
             />
             <ToolCard 
               icon={<Languages className="h-6 w-6" />}
-              title="Language Translator"
-              description="Translate text between over 100 languages with high accuracy"
+              titleKey="tool.language-translator"
+              descriptionKey="tool.language-translator.description"
               bgColor="bg-gradient-to-r from-[#46c2cb] to-[#4fd8e3]"
               onClick={() => handleSelectTool("language-translator")}
+              isImplemented={implementedTools.includes("language-translator")}
             />
           </CategorySection>
           
           {/* Voice Tools */}
           <CategorySection 
             id="voice" 
-            title="Voice Tools" 
-            description="Powerful voice processing tools to enhance audio content and communication"
+            titleKey="category.voice" 
+            descriptionKey="category.voice.description"
             icon={<Mic className="h-8 w-8" />}
           >
             <ToolCard 
               icon={<Volume2 className="h-6 w-6" />}
-              title="Text to Speech"
-              description="Convert written text into natural-sounding speech with multiple voice options"
+              titleKey="tool.text-to-speech"
+              descriptionKey="tool.text-to-speech.description"
               bgColor="bg-gradient-to-r from-[#e94560] to-[#f2726d]"
               onClick={() => handleSelectTool("text-to-speech")}
+              isImplemented={implementedTools.includes("text-to-speech")}
             />
             <ToolCard 
               icon={<Mic className="h-6 w-6" />}
-              title="Speech Recognition"
-              description="Convert spoken words into text with our high-accuracy speech recognition system"
+              titleKey="tool.speech-recognition"
+              descriptionKey="tool.speech-recognition.description"
               bgColor="bg-gradient-to-r from-[#72a1f8] to-[#a2b9f0]"
               onClick={() => handleSelectTool("speech-recognition")}
+              isImplemented={implementedTools.includes("speech-recognition")}
             />
             <ToolCard 
               icon={<Music className="h-6 w-6" />}
-              title="Music Generator"
-              description="Create original music clips based on your description and preferences"
+              titleKey="tool.music-generator"
+              descriptionKey="tool.music-generator.description"
               bgColor="bg-gradient-to-r from-[#5b8def] to-[#7da6f4]"
               onClick={() => handleSelectTool("music-generator")}
+              isImplemented={implementedTools.includes("music-generator")}
             />
           </CategorySection>
           
           {/* Image Tools */}
           <CategorySection 
             id="image" 
-            title="Image Tools" 
-            description="Transform, enhance, and extract information from images with powerful AI"
+            titleKey="category.image" 
+            descriptionKey="category.image.description"
             icon={<Image className="h-8 w-8" />}
           >
             <ToolCard 
               icon={<FileImage className="h-6 w-6" />}
-              title="Image to Text"
-              description="Extract text from images using advanced OCR technology"
+              titleKey="tool.image-to-text"
+              descriptionKey="tool.image-to-text.description"
               bgColor="bg-gradient-to-r from-[#e94560] to-[#f2726d]"
               onClick={() => handleSelectTool("image-to-text")}
+              isImplemented={implementedTools.includes("image-to-text")}
             />
             <ToolCard 
               icon={<Image className="h-6 w-6" />}
-              title="Image Generator"
-              description="Create unique images from textual descriptions with AI"
+              titleKey="tool.image-generator"
+              descriptionKey="tool.image-generator.description"
               bgColor="bg-gradient-to-r from-[#72a1f8] to-[#a2b9f0]"
               onClick={() => handleSelectTool("image-generator")}
+              isImplemented={implementedTools.includes("image-generator")}
             />
             <ToolCard 
               icon={<Repeat className="h-6 w-6" />}
-              title="Image Style Transfer"
-              description="Apply artistic styles to your images with AI-powered style transfer"
+              titleKey="tool.image-style-transfer"
+              descriptionKey="tool.image-style-transfer.description"
               bgColor="bg-gradient-to-r from-[#5b8def] to-[#7da6f4]"
               onClick={() => handleSelectTool("image-style-transfer")}
+              isImplemented={implementedTools.includes("image-style-transfer")}
             />
           </CategorySection>
           
           {/* Video Tools */}
           <CategorySection 
             id="video" 
-            title="Video Tools" 
-            description="Create, edit, and enhance video content with cutting-edge AI technology"
+            titleKey="category.video" 
+            descriptionKey="category.video.description"
             icon={<Video className="h-8 w-8" />}
           >
             <ToolCard 
               icon={<Video className="h-6 w-6" />}
-              title="Video Generator"
-              description="Create short videos from text descriptions or script outlines"
+              titleKey="tool.video-generator"
+              descriptionKey="tool.video-generator.description"
               bgColor="bg-gradient-to-r from-[#e94560] to-[#f2726d]"
               onClick={() => handleSelectTool("video-generator")}
+              isImplemented={implementedTools.includes("video-generator")}
             />
             <ToolCard 
               icon={<Camera className="h-6 w-6" />}
-              title="Video Summarizer"
-              description="Generate concise summaries of video content with key points highlighted"
+              titleKey="tool.video-summarizer"
+              descriptionKey="tool.video-summarizer.description"
               bgColor="bg-gradient-to-r from-[#72a1f8] to-[#a2b9f0]"
               onClick={() => handleSelectTool("video-summarizer")}
+              isImplemented={implementedTools.includes("video-summarizer")}
             />
             <ToolCard 
               icon={<SlidersHorizontal className="h-6 w-6" />}
-              title="Video Editor"
-              description="Edit and enhance videos with AI-powered effects and transformations"
+              titleKey="tool.video-editor"
+              descriptionKey="tool.video-editor.description"
               bgColor="bg-gradient-to-r from-[#5b8def] to-[#7da6f4]"
               onClick={() => handleSelectTool("video-editor")}
+              isImplemented={implementedTools.includes("video-editor")}
             />
           </CategorySection>
         </div>
@@ -268,16 +297,40 @@ const Index = () => {
             <ArticleGenerator />
           </div>
         )}
+
+        {activeTool === "speech-recognition" && (
+          <div id="speech-recognition" className="mb-16">
+            <SpeechRecognition />
+          </div>
+        )}
+
+        {activeTool === "image-generator" && (
+          <div id="image-generator" className="mb-16">
+            <ImageGenerator />
+          </div>
+        )}
+
+        {activeTool === "language-translator" && (
+          <div id="language-translator" className="mb-16">
+            <LanguageTranslator />
+          </div>
+        )}
+        
+        {activeTool && !implementedTools.includes(activeTool) && (
+          <div id={activeTool} className="mb-16">
+            <ComingSoon />
+          </div>
+        )}
       </main>
       
-      <footer className="bg-[#16213e] py-12 border-t border-[#0f3460]">
+      <footer className={`bg-[#16213e] py-12 border-t border-[#0f3460] ${dir === "rtl" ? "text-right" : "text-left"}`}>
         <div className="container mx-auto px-4 text-center">
           <div className="flex justify-center items-center mb-6">
             <BrainCircuit className="h-8 w-8 text-[#e94560]" />
-            <span className="ml-2 text-xl font-bold text-white">AI Toolkit Pro</span>
+            <span className="ml-2 text-xl font-bold text-white">{t("app.title")}</span>
           </div>
-          <p className="text-gray-400">© 2025 AI Toolkit Pro. All rights reserved.</p>
-          <p className="text-sm mt-2 text-gray-500">Powered by advanced AI technologies</p>
+          <p className="text-gray-400">{t("footer.copyright")}</p>
+          <p className="text-sm mt-2 text-gray-500">{t("footer.powered-by")}</p>
           <div className="mt-6 flex justify-center space-x-6">
             <a href="#" className="text-gray-400 hover:text-[#e94560] transition-colors">
               <span className="sr-only">Twitter</span>
