@@ -27,6 +27,8 @@ interface TableInfo {
   rowCount?: number;
 }
 
+type TableName = "profiles" | "chatbots" | "chatbot_knowledge" | "video_summaries";
+
 export default function DatabaseInfo() {
   const [tables, setTables] = useState<TableInfo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -39,10 +41,10 @@ export default function DatabaseInfo() {
     try {
       // Get the list of tables we want to show
       const tablesToShow = [
-        { name: 'profiles', schema: 'public' },
-        { name: 'chatbots', schema: 'public' },
-        { name: 'chatbot_knowledge', schema: 'public' },
-        { name: 'video_summaries', schema: 'public' }
+        { name: 'profiles' as TableName, schema: 'public' },
+        { name: 'chatbots' as TableName, schema: 'public' },
+        { name: 'chatbot_knowledge' as TableName, schema: 'public' },
+        { name: 'video_summaries' as TableName, schema: 'public' }
       ];
       
       const tablesInfo: TableInfo[] = [...tablesToShow];
