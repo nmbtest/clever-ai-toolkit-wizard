@@ -37,35 +37,32 @@ export default function DatabaseInfo() {
     setError(null);
     
     try {
-      // Query to get all tables in the public schema
-      const { data, error } = await supabase
-        .from('pg_catalog.pg_tables')
-        .select('schemaname, tablename')
-        .eq('schemaname', 'public');
-
-      if (error) throw error;
-
-      if (data) {
-        const tablesInfo: TableInfo[] = data.map(table => ({
-          name: table.tablename,
-          schema: table.schemaname
-        }));
-        
-        // Get row counts for each table
-        for (const table of tablesInfo) {
-          if (table.schema === 'public') {
-            const { count, error: countError } = await supabase
-              .from(table.name)
-              .select('*', { count: 'exact', head: true });
-            
-            if (!countError) {
-              table.rowCount = count;
-            }
+      // Get the list of tables we want to show
+      const tablesToShow = [
+        { name: 'profiles', schema: 'public' },
+        { name: 'chatbots', schema: 'public' },
+        { name: 'chatbot_knowledge', schema: 'public' },
+        { name: 'video_summaries', schema: 'public' }
+      ];
+      
+      const tablesInfo: TableInfo[] = [...tablesToShow];
+      
+      // Get row counts for each table
+      for (const table of tablesInfo) {
+        if (table.schema === 'public') {
+          const { count, error: countError } = await supabase
+            .from(table.name)
+            .select('*', { count: 'exact', head: true });
+          
+          if (!countError) {
+            table.rowCount = count;
+          } else {
+            console.error(`Error fetching count for ${table.name}:`, countError);
           }
         }
-        
-        setTables(tablesInfo);
       }
+      
+      setTables(tablesInfo);
     } catch (err) {
       console.error('Error fetching tables:', err);
       setError(typeof err === 'object' && err !== null && 'message' in err 
