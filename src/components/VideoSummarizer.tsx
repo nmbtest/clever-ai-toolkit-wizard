@@ -173,13 +173,14 @@ export default function VideoSummarizer() {
                     onChange={handleFileChange}
                   />
                   <label htmlFor="video-upload">
-                    <Button 
-                      variant="outline" 
-                      className="border-[#0f3460] text-white hover:bg-[#0f3460]/50"
-                      as="span"
-                    >
-                      {t("Choose File")}
-                    </Button>
+                    <div className="inline-block">
+                      <Button 
+                        variant="outline" 
+                        className="border-[#0f3460] text-white hover:bg-[#0f3460]/50"
+                      >
+                        {t("Choose File")}
+                      </Button>
+                    </div>
                   </label>
                 </div>
                 
