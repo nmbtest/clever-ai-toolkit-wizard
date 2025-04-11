@@ -1,42 +1,51 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+
+/* Add animation for progress bar in video generator */
+@keyframes progress-bar {
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.animate-progress-bar {
+  animation: progress-bar 5s linear forwards;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Add animation for slow pulse */
+@keyframes pulse-slow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
 }
 
-.card {
-  padding: 2em;
+/* Add styles for RTL support */
+.dir-rtl {
+  direction: rtl;
 }
 
-.read-the-docs {
-  color: #888;
+/* Add filter styles for video editor */
+.filter-grayscale {
+  filter: grayscale(100%);
+}
+
+.filter-sepia {
+  filter: sepia(100%);
+}
+
+.filter-vintage {
+  filter: sepia(50%) contrast(110%) brightness(110%);
+}
+
+.filter-cold {
+  filter: hue-rotate(180deg) saturate(110%);
+}
+
+.filter-warm {
+  filter: sepia(30%) saturate(140%);
+}
+
+/* Font for Arabic text */
+.font-arabic {
+  font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }

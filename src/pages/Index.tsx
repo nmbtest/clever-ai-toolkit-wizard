@@ -7,6 +7,13 @@ import ArticleGenerator from "@/components/ArticleGenerator";
 import SpeechRecognition from "@/components/SpeechRecognition";
 import ImageGenerator from "@/components/ImageGenerator";
 import LanguageTranslator from "@/components/LanguageTranslator";
+import ImageStyleTransfer from "@/components/ImageStyleTransfer";
+import ChatbotBuilder from "@/components/ChatbotBuilder";
+import CodeGenerator from "@/components/CodeGenerator";
+import MusicGenerator from "@/components/MusicGenerator";
+import VideoGenerator from "@/components/VideoGenerator";
+import VideoSummarizer from "@/components/VideoSummarizer";
+import VideoEditor from "@/components/VideoEditor";
 import CategorySection from "@/components/CategorySection";
 import ToolCard from "@/components/ToolCard";
 import ComingSoon from "@/components/ComingSoon";
@@ -63,7 +70,14 @@ const Index = () => {
     "article-generator",
     "speech-recognition",
     "image-generator",
-    "language-translator"
+    "language-translator",
+    "image-style-transfer",
+    "chatbot-builder",
+    "code-generator",
+    "music-generator",
+    "video-generator",
+    "video-summarizer",
+    "video-editor"
   ];
 
   return (
@@ -313,6 +327,48 @@ const Index = () => {
         {activeTool === "language-translator" && (
           <div id="language-translator" className="mb-16">
             <LanguageTranslator />
+          </div>
+        )}
+
+        {activeTool === "image-style-transfer" && (
+          <div id="image-style-transfer" className="mb-16">
+            <ImageStyleTransfer />
+          </div>
+        )}
+
+        {activeTool === "chatbot-builder" && (
+          <div id="chatbot-builder" className="mb-16">
+            <ChatbotBuilder />
+          </div>
+        )}
+
+        {activeTool === "code-generator" && (
+          <div id="code-generator" className="mb-16">
+            <CodeGenerator />
+          </div>
+        )}
+
+        {activeTool === "music-generator" && (
+          <div id="music-generator" className="mb-16">
+            <MusicGenerator />
+          </div>
+        )}
+
+        {activeTool === "video-generator" && (
+          <div id="video-generator" className="mb-16">
+            <VideoGenerator />
+          </div>
+        )}
+
+        {activeTool === "video-summarizer" && (
+          <div id="video-summarizer" className="mb-16">
+            <VideoSummarizer />
+          </div>
+        )}
+
+        {activeTool === "video-editor" && (
+          <div id="video-editor" className="mb-16">
+            <VideoEditor />
           </div>
         )}
         
