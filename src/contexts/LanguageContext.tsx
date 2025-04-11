@@ -69,6 +69,25 @@ const translations = {
     
     // Language
     "language.switch": "العربية",
+    "language.changed": "Language changed to English",
+    
+    // Additional translations for tool interfaces
+    "Generate": "Generate",
+    "Generating...": "Generating...",
+    "Download": "Download",
+    "Copy": "Copy",
+    "Please enter a description": "Please enter a description",
+    "Image generated successfully": "Image generated successfully",
+    "Image downloaded": "Image downloaded",
+    "Create Images with AI": "Create Images with AI",
+    "Generate unique images from your text descriptions": "Generate unique images from your text descriptions",
+    "Image Description": "Image Description",
+    "Describe the image you want to generate...": "Describe the image you want to generate...",
+    "Image Size": "Image Size",
+    "Generated image": "Generated image",
+    "Generating your image...": "Generating your image...",
+    "Generate Image": "Generate Image",
+    "Explore our suite of 13 AI-powered tools to enhance your productivity, creativity, and workflow": "Explore our suite of 13 AI-powered tools to enhance your productivity, creativity, and workflow"
   },
   ar: {
     // Header
@@ -128,6 +147,25 @@ const translations = {
     
     // Language
     "language.switch": "English",
+    "language.changed": "تم تغيير اللغة إلى العربية",
+    
+    // Additional translations for tool interfaces
+    "Generate": "إنشاء",
+    "Generating...": "جاري الإنشاء...",
+    "Download": "تحميل",
+    "Copy": "نسخ",
+    "Please enter a description": "الرجاء إدخال وصف",
+    "Image generated successfully": "تم إنشاء الصورة بنجاح",
+    "Image downloaded": "تم تحميل الصورة",
+    "Create Images with AI": "إنشاء صور باستخدام الذكاء الاصطناعي",
+    "Generate unique images from your text descriptions": "إنشاء صور فريدة من الأوصاف النصية",
+    "Image Description": "وصف الصورة",
+    "Describe the image you want to generate...": "صف الصورة التي ترغب في إنشائها...",
+    "Image Size": "حجم الصورة",
+    "Generated image": "الصورة المنشأة",
+    "Generating your image...": "جاري إنشاء الصورة...",
+    "Generate Image": "إنشاء صورة",
+    "Explore our suite of 13 AI-powered tools to enhance your productivity, creativity, and workflow": "استكشف مجموعتنا المكونة من 13 أداة مدعومة بالذكاء الاصطناعي لتعزيز إنتاجيتك وإبداعك وسير عملك"
   }
 };
 
@@ -141,12 +179,24 @@ const LanguageContext = createContext<LanguageContextType>({
 export const useLanguage = () => useContext(LanguageContext);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>("en");
+  // Try to get the stored language from localStorage, default to "en"
+  const [language, setLanguage] = useState<Language>(() => {
+    const storedLanguage = localStorage.getItem("preferredLanguage");
+    return (storedLanguage === "ar" ? "ar" : "en") as Language;
+  });
   
-  // Set the direction attribute on the document
+  // Save language preference to localStorage when it changes
   useEffect(() => {
+    localStorage.setItem("preferredLanguage", language);
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = language;
+    
+    // Add RTL specific styles for Arabic
+    if (language === "ar") {
+      document.body.classList.add("font-arabic");
+    } else {
+      document.body.classList.remove("font-arabic");
+    }
   }, [language]);
   
   const t = (key: string): string => {

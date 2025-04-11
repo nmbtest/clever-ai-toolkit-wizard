@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
 export default function ImageGenerator() {
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -53,18 +53,21 @@ export default function ImageGenerator() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <Label htmlFor="prompt">{t("Image Description")}</Label>
+            <Label htmlFor="prompt" className={dir === "rtl" ? "block text-right" : "block"}>{t("Image Description")}</Label>
             <Textarea
               id="prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder={t("Describe the image you want to generate...")}
-              className="min-h-[100px] bg-[#0f3460] border-gray-700 text-white mt-2"
+              className={`min-h-[100px] bg-[#0f3460] border-gray-700 text-white mt-2 ${dir === "rtl" ? "text-right" : ""}`}
+              dir={dir}
             />
           </div>
           
           <div>
-            <Label htmlFor="size">{t("Image Size")}: {imageSize}x{imageSize}px</Label>
+            <Label htmlFor="size" className={dir === "rtl" ? "block text-right" : "block"}>
+              {t("Image Size")}: {imageSize}x{imageSize}px
+            </Label>
             <Slider
               id="size"
               min={256}
@@ -73,6 +76,7 @@ export default function ImageGenerator() {
               value={[imageSize]}
               onValueChange={(value) => setImageSize(value[0])}
               className="mt-2"
+              dir={dir}
             />
           </div>
           
@@ -95,7 +99,7 @@ export default function ImageGenerator() {
             </div>
           )}
         </CardContent>
-        <CardFooter className="flex justify-between border-t border-gray-800 pt-4">
+        <CardFooter className={`flex ${dir === "rtl" ? "flex-row-reverse" : ""} justify-between border-t border-gray-800 pt-4`}>
           <Button 
             onClick={handleGenerate} 
             disabled={isGenerating || !prompt.trim()}
@@ -110,7 +114,7 @@ export default function ImageGenerator() {
               variant="outline"
               className="border-gray-700 flex items-center"
             >
-              <Download className="h-4 w-4 mr-2" />
+              <Download className={`h-4 w-4 ${dir === "rtl" ? "ml-2" : "mr-2"}`} />
               {t("Download")}
             </Button>
           )}
